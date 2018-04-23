@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.cord</groupId>
+  <artifactId>ignite-example</artifactId>
+  <version>1.0-SNAPSHOT</version>
+
+  <name>ignite-example</name>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>1.5.8.RELEASE</version>
+  </parent>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <java.version>1.8</java.version>
+    <ignite.version>2.3.0</ignite.version>
+    <skipTests>true</skipTests>
+  </properties>
+
+  <build>
+      <plugins>
+        <plugin>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-maven-plugin</artifactId>
+        </plugin>
+      </plugins>
+  </build>
+
+  <dependencies>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+        <exclusions>
+            <exclusion>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-log4j</artifactId>
+            </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+          <groupId>org.apache.ignite</groupId>
+          <artifactId>ignite-core</artifactId>
+          <version>${ignite.version}</version>
+      </dependency>
+      <dependency>
+          <groupId>org.apache.ignite</groupId>
+          <artifactId>ignite-spring</artifactId>
+          <version>${ignite.version}</version>
+      </dependency>
+      <dependency>
+          <groupId>org.apache.ignite</groupId>
+          <artifactId>ignite-indexing</artifactId>
+          <version>${ignite.version}</version>
+      </dependency>
+      <dependency>
+          <groupId>org.apache.ignite</groupId>
+          <artifactId>ignite-log4j2</artifactId>
+          <version>${ignite.version}</version>
+      </dependency>
+  </dependencies>
+
+</project>
