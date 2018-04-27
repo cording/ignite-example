@@ -26,6 +26,9 @@
     -->
 	
 	<bean id="igniteCfg" class="org.apache.ignite.configuration.IgniteConfiguration">
+        <!-- Consistent globally unique node identifier which survives node restarts.-->
+        <!--<property name="consistentId" value="cording"/>-->
+
 	    <!-- Set to true to enable distributed class loading for examples, default is false. -->
         <property name="peerClassLoadingEnabled" value="true"/>
 		
