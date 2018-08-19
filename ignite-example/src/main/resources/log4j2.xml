@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration status="error">
+    <!--先定义所有的appender-->
+    <appenders>
+        <!--这个输出控制台的配置-->
+        <Console name="Console" target="SYSTEM_OUT">
+            <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+            <ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY"/>
+            <!--这个都知道是输出日志的格式-->
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
+        </Console>
+
+        <!--这个会打印出所有的信息，并按日期分隔 -->
+        <RollingFile name="rollingFile" fileName="logs/ignite_info.log"
+                     filePattern="logs/ignite_info.%d{yyyy-MM-dd}_%i.log" append="true">
+            <ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <OnStartupTriggeringPolicy/>
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="errorRollingFile" fileName="logs/ignite_error.log"
+                     filePattern="logs/ignite_error.%d{yyyy-MM-dd}_%i.log" append="true">
+            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <OnStartupTriggeringPolicy/>
+            </Policies>
+        </RollingFile>
+    </appenders>
+    <!--然后定义logger，只有定义了logger并引入的appender，appender才会生效-->
+    <loggers>
+        <!--建立一个默认的root的logger-->
+        <!-- 同步日志-->
+        <!--<root level="trace">-->
+        <!--&lt;!&ndash;<appender-ref ref="RollingFile"/>&ndash;&gt;-->
+        <!--<appender-ref ref="Console"/>-->
+        <!--<appender-ref ref="info_file"/>-->
+        <!--<appender-ref ref="error_file"/>-->
+        <!--</root>-->
+
+        <!-- 异步日志-->
+        <AsyncRoot level="trace" additivity="false" includeLocation="true">
+            <!--<appender-ref ref="MongoAsync"/>-->
+            <appender-ref ref="Console"/>
+            <appender-ref ref="rollingFile"/>
+            <appender-ref ref="errorRollingFile"/>
+        </AsyncRoot>
+    </loggers>
+</configuration>
