@@ -109,27 +109,28 @@
                 <!-- Path to the directory where WAL (Write Ahead Log) archive is stored. -->
                 <!--<property name="walArchivePath" value="D:\\Test\\db\\wal\\archive"/>-->
 
+                <property name="writeThrottlingEnabled" value="true"/>
+
             </bean>
         </property>
 		
 	    <property name="cacheConfiguration">
             <list>
-                <!-- Partitioned cache example configuration (Atomic mode). -->
                 <bean class="org.apache.ignite.configuration.CacheConfiguration">
-                    <property name="name" value="person"/>
+                    <property name="name" value="student"/>
                     <property name="cacheMode" value="REPLICATED"/>
                     <property name="backups" value="1"/>
-					<property name="atomicityMode" value="TRANSACTIONAL"/>
+					<property name="atomicityMode" value="ATOMIC"/>
+                    <!-- Force cache to return the instance that is stored in cache instead of creating a copy. -->
                     <property name="copyOnRead" value="false"/>
                     <property name="dataRegionName" value="Default_Region"/>
                     <property name="indexedTypes">
                         <list>
                             <value>java.lang.Long</value>
-                            <value>org.cord.ignite.mode.Person</value>
+                            <value>org.cord.ignite.data.domain.Student</value>
                         </list>
                     </property>
                 </bean>
-
             </list>
         </property>
 

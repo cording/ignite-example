@@ -104,7 +104,7 @@ public class CollocatedController {
         if(init.get()){
             return "already execute init.";
         }
-
+        //定义三个缓存
         CacheConfiguration<Long, X>  xcf = new CacheConfiguration<Long, X>("X")
                 .setCacheMode(CacheMode.PARTITIONED)
                 .setIndexedTypes(Long.class, X.class);
@@ -125,7 +125,7 @@ public class CollocatedController {
         IgniteCache<Long, X> xc = ignite.cache("X");
         IgniteCache<AffinityKey<Long>, Y> yc = ignite.cache("Y");
         IgniteCache<AffinityKey<Long>, Z> zc = ignite.cache("Z");
-
+        //加载数据
         Y y;
         Z z;
         for (long i = 0; i < 100; i++) {

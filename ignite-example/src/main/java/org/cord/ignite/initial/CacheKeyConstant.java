@@ -7,4 +7,6 @@ package org.cord.ignite.initial;
 public class CacheKeyConstant {
 
     public static final String PERSON = "person";
+
+    public static final String STUDENT = "student";
 }
