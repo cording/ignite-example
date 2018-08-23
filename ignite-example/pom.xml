@@ -25,10 +25,14 @@
 
   <build>
       <plugins>
-        <plugin>
-          <groupId>org.springframework.boot</groupId>
-          <artifactId>spring-boot-maven-plugin</artifactId>
-        </plugin>
+        <!--<plugin>-->
+          <!--<groupId>org.springframework.boot</groupId>-->
+          <!--<artifactId>spring-boot-maven-plugin</artifactId>-->
+        <!--</plugin>-->
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-compiler-plugin</artifactId>
+          </plugin>
       </plugins>
   </build>
 
@@ -62,6 +66,11 @@
           <groupId>org.apache.ignite</groupId>
           <artifactId>ignite-log4j2</artifactId>
           <version>${ignite.version}</version>
+      </dependency>
+      <dependency>
+          <groupId>com.lmax</groupId>
+          <artifactId>disruptor</artifactId>
+          <version>3.3.6</version>
       </dependency>
       <dependency>
           <groupId>mysql</groupId>
