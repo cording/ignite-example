@@ -63,6 +63,13 @@
         <!-- Configure system thread pool. -->
         <property name="systemThreadPoolSize" value="32"/>
 
+        <property name="userAttributes">
+            <map key-type="java.lang.String" value-type="java.lang.Boolean">
+                <entry key="data.node" value="true"/>  <!--数据节点属性-->
+                <entry key="service.node" value="true"/>  <!--服务节点属性-->
+            </map>
+        </property>
+
         <!-- Redefining maximum memory size for the cluster node usage. -->
         <property name="dataStorageConfiguration">
             <bean class="org.apache.ignite.configuration.DataStorageConfiguration">
@@ -124,17 +131,69 @@
                     <!-- Force cache to return the instance that is stored in cache instead of creating a copy. -->
                     <property name="copyOnRead" value="false"/>
                     <property name="dataRegionName" value="Default_Region"/>
+                    <property name="sqlSchema" value="PUBLIC"/>
                     <property name="indexedTypes">
                         <list>
                             <value>java.lang.Long</value>
                             <value>org.cord.ignite.data.domain.Student</value>
                         </list>
                     </property>
+                    <property name="nodeFilter"> <!--配置节点过滤器-->
+                        <bean class="org.cord.ignite.initial.DataNodeFilter"/>
+                    </property>
+                </bean>
+                <bean class="org.apache.ignite.configuration.CacheConfiguration">
+                    <property name="name" value="myCounterCache"/>
+                    <property name="cacheMode" value="REPLICATED"/>
+                    <property name="backups" value="1"/>
+                    <property name="atomicityMode" value="ATOMIC"/>
+                    <!-- Force cache to return the instance that is stored in cache instead of creating a copy. -->
+                    <property name="copyOnRead" value="false"/>
+                    <property name="dataRegionName" value="Default_Region"/>
+                    <property name="indexedTypes">
+                        <list>
+                            <value>java.lang.String</value>
+                            <value>java.lang.Integer</value>
+                        </list>
+                    </property>
                 </bean>
             </list>
         </property>
 
-		
+        <property name="serviceConfiguration">
+            <list>
+                <!--
+                  Setting up MaintenanceService. The service will be deployed automatically according to the configuration
+                  below.
+                  -->
+                <bean class="org.apache.ignite.services.ServiceConfiguration">
+                    <!-- Unique service name -->
+                    <property name="name" value="myCounterService"/>
+
+                    <!-- Service implementation's class -->
+                    <property name="service">
+                        <!--<bean class="org.cord.ignite.servicegrid.MyCounterServiceImpl"/>-->
+                        <ref bean="myCounterServiceImpl" />
+                    </property>
+
+                    <!-- Only one instance of the service will be deployed cluster wide. -->
+                    <property name="totalCount" value="1"/>
+
+                    <!-- Only one instance of the service can be deployed on a single node. -->
+                    <property name="maxPerNodeCount" value="1"/>
+
+                    <!--
+                      Enabling a special nodes filter for this service. The filter will make sure that the service
+                      will be deployed only on the nodes that have 'maintenance.service.node' attribute in the local
+                      node map.
+                    -->
+                    <property name="nodeFilter">
+                        <bean class="org.cord.ignite.initial.ServiceNodeFilter"/>
+                    </property>
+                </bean>
+            </list>
+        </property>
+
 	    <property name="discoverySpi">
 		    <bean class="org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi">
 			    <property name="localPort" value="48500"/>
