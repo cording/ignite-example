@@ -35,7 +35,10 @@ public class NormalController {
     public @ResponseBody
     String sqlFieldsQuery(HttpServletRequest request, HttpServletResponse response) {
         IgniteCache<Long, Student> cache = ignite.cache(CacheKeyConstant.STUDENT);
-        List<List<?>> res = cache.query(new SqlFieldsQuery("select name from \"student\".student")).getAll();
+        SqlFieldsQuery  sfq = new SqlFieldsQuery("select name from \"student\".student");
+        sfq.setReplicatedOnly(true);
+        sfq.setLazy(true); //懒加载,应对海量数据
+        List<List<?>> res = cache.query(sfq).getAll();
         System.out.format("The name is %s.\n", res.get(0).get(0));
 
         return "all executed!";
