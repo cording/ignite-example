@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
  * Created by cord on 2018/4/11.
  * http://localhost:8080/sqlFieldsQuery
  * http://localhost:8080/sqlQuery
+ * http://localhost:8080/getByKey
  */
 @Controller
 public class NormalController {
@@ -30,6 +31,15 @@ public class NormalController {
     @Autowired
     private Ignite ignite;
 
+    @RequestMapping("/getByKey")
+    public @ResponseBody
+    String getByKey(HttpServletRequest request, HttpServletResponse response) {
+        IgniteCache<Long, Student> cache = ignite.cache(CacheKeyConstant.STUDENT);
+        Student student = cache.get(1L);
+        System.out.format("The result is %s.\n", student.toString());
+
+        return "all executed!";
+    }
 
     @RequestMapping("/sqlFieldsQuery")
     public @ResponseBody

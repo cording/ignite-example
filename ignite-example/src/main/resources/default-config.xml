@@ -194,6 +194,13 @@
             </list>
         </property>
 
+        <property name="clientConnectorConfiguration">
+            <!-- Client connector configuration (JDBC, ODBC, thin clients) -->
+            <bean class="org.apache.ignite.configuration.ClientConnectorConfiguration">
+                <property name="port" value="10800"/>
+            </bean>
+        </property>
+
 	    <property name="discoverySpi">
 		    <bean class="org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi">
 			    <property name="localPort" value="48500"/>
