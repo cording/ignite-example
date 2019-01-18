@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+    <!--
+        Alter configuration below as needed.
+    -->
+	
+	<bean id="igniteCfg" class="org.apache.ignite.configuration.IgniteConfiguration">
+        <!-- Consistent globally unique node identifier which survives node restarts.-->
+        <!--<property name="consistentId" value="cording"/>-->
+
+	    <!-- Set to true to enable distributed class loading for examples, default is false. -->
+        <property name="peerClassLoadingEnabled" value="true"/>
+		
+		<!-- Set deployment mode. -->
+        <property name="deploymentMode" value="CONTINUOUS"/>
+		
+		<!-- Disable missed resources caching. -->
+        <property name="peerClassLoadingMissedResourcesCacheSize" value="0"/>
+
+        <!-- config client mode -->
+        <property name="clientMode" value="false"/>
+		
+		<!--
+            Exclude force peer class loading of a class,
+            even if exists locally.
+        -->
+        <property name="peerClassLoadingLocalClassPathExclude">
+            <list>
+               <value>org.cord.ignite.*</value>
+            </list>
+        </property>
+
+        <property name="includeEventTypes">
+            <list>
+                <util:constant static-field="org.apache.ignite.events.EventType.EVT_TASK_STARTED"/>
+            </list>
+        </property>
+
+        <!-- Configure internal thread pool. -->
+        <property name="publicThreadPoolSize" value="64"/>
+
+        <!-- Configure system thread pool. -->
+        <property name="systemThreadPoolSize" value="32"/>
+
+        <property name="userAttributes">
+            <map key-type="java.lang.String" value-type="java.lang.Boolean">
+                <entry key="data.node" value="true"/>  <!--数据节点属性-->
+                <entry key="service.node" value="true"/>  <!--服务节点属性-->
+            </map>
+        </property>
+
+        <!-- Redefining maximum memory size for the cluster node usage. -->
+        <property name="dataStorageConfiguration">
+            <bean class="org.apache.ignite.configuration.DataStorageConfiguration">
+                <!-- Redefining the default region's settings -->
+                <property name="defaultDataRegionConfiguration">
+                    <bean class="org.apache.ignite.configuration.DataRegionConfiguration">
+                        <property name="name" value="Default_Region"/>
+                        <!-- Setting the size of the default region to 1GB. -->
+                        <property name="maxSize" value="#{1L * 1024 * 1024 * 1024}"/>
+                        <!-- Enabling Apache Ignite Persistent Store. -->
+                        <!--<property name="persistenceEnabled" value="true"/>-->
+                    </bean>
+                </property>
+                <property name="dataRegionConfigurations">
+                    <list>
+                        <!--
+                            Defining a data region that will consume up to 500 MB of RAM and
+                            will have eviction and persistence enabled.
+                        -->
+                        <bean class="org.apache.ignite.configuration.DataRegionConfiguration">
+                            <!-- Custom region name. -->
+                            <property name="name" value="500MB_Region"/>
+                            <!-- 100 MB initial size. -->
+                            <property name="initialSize" value="#{100L * 1024 * 1024}"/>
+                            <!-- 500 MB maximum size. -->
+                            <property name="maxSize" value="#{500L * 1024 * 1024}"/>
+                            <!-- Enabling persistence for the region. -->
+                            <!--<property name="persistenceEnabled" value="true"/>-->
+                        </bean>
+                    </list>
+                </property>
+
+                <!-- Sets property that defines behavior of wal fsync. -->
+                <property name="walMode">
+                    <util:constant static-field="org.apache.ignite.configuration.WALMode.DEFAULT"/>
+                </property>
+
+                <!-- Path where data and indexes will be persisted. -->
+                <!--<property name="storagePath" value="D:\\Test\\db" />-->
+
+                <!-- Path to the directory where WAL (Write Ahead Log) is stored. -->
+                <!--<property name="walPath" value="D:\\Test\\db\\wal"/>-->
+
+                <!-- Path to the directory where WAL (Write Ahead Log) archive is stored. -->
+                <!--<property name="walArchivePath" value="D:\\Test\\db\\wal\\archive"/>-->
+
+                <property name="writeThrottlingEnabled" value="true"/>
+
+            </bean>
+        </property>
+
+        <property name="clientConnectorConfiguration">
+            <!-- Client connector configuration (JDBC, ODBC, thin clients) -->
+            <bean class="org.apache.ignite.configuration.ClientConnectorConfiguration">
+                <property name="port" value="10800"/>
+            </bean>
+        </property>
+
+	    <property name="discoverySpi">
+		    <bean class="org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi">
+			    <property name="localPort" value="48500"/>
+				<property name="localPortRange" value="20"/>
+				<property name="ipFinder">
+				    <bean class="org.apache.ignite.spi.discovery.tcp.ipfinder.vm.TcpDiscoveryVmIpFinder">
+					    <property name="addresses">
+						    <list>
+							    <value>127.0.0.1:48500..48520</value>
+							</list>
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</property>
+		<property name="communicationSpi">
+		    <bean class="org.apache.ignite.spi.communication.tcp.TcpCommunicationSpi">
+			    <property name="localPort" value="48100"/>
+			</bean>
+		</property>
+	</bean>
+</beans>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

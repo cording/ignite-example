@@ -13,11 +13,12 @@ public class Student implements Serializable{
     private Integer studId;
 
     @QuerySqlField(orderedGroups = {@QuerySqlField.Group(
-            name = "student", order = 0)})
+            name = "student_ne_index", order = 0)})
     private String name;
     @QuerySqlField(orderedGroups = {@QuerySqlField.Group(
-            name = "student", order = 1)})
+            name = "student_ne_index", order = 1)})
     private String email;
+    @QuerySqlField
     private Date dob;
 
     public Integer getStudId() {

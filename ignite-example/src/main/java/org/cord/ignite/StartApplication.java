@@ -17,15 +17,16 @@ import java.util.List;
  * Created by cord on 2018/4/11.
  */
 @SpringBootApplication
-@ImportResource(locations={"classpath:default-config.xml"})
+//@ImportResource(locations={"classpath:ignite-config.xml"})
+@ImportResource(locations={"${ignite.config}"})
 @MapperScan("org.cord.ignite.data.mapper")
 public class StartApplication implements CommandLineRunner{
 
     @Autowired
     private Ignite ignite;
 
-    @Autowired
-    private DataLoader dataLoader;
+//    @Autowired
+//    private DataLoader dataLoader;
 
 
     /** 启动主方法*/
@@ -36,11 +37,11 @@ public class StartApplication implements CommandLineRunner{
     /** 启动完成之后执行初始化*/
     @Override
     public void run(String... strings) throws Exception {
-        if(!ignite.active()){
-            ignite.active(true);    //如果集群未启动则启动集群
+        if(!ignite.cluster().active()){
+            ignite.cluster().active(true);    //如果集群未启动则启动集群
         }
 
         //加载数据
-        dataLoader.loadData();
+//        dataLoader.loadData();
     }
 }

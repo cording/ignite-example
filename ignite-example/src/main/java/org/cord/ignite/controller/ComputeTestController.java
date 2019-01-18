@@ -6,6 +6,7 @@ import org.apache.ignite.cache.query.SqlFieldsQuery;
 import org.apache.ignite.cache.query.SqlQuery;
 import org.apache.ignite.cluster.ClusterNode;
 import org.apache.ignite.compute.*;
+import org.apache.ignite.configuration.IgniteConfiguration;
 import org.apache.ignite.lang.IgniteCallable;
 import org.cord.ignite.data.domain.Student;
 import org.cord.ignite.initial.CacheKeyConstant;
@@ -36,6 +37,9 @@ public class ComputeTestController {
 
     @Autowired
     private Ignite ignite;
+
+    @Autowired
+    private IgniteConfiguration igniteCfg;
 
     /** broadCast测试*/
     @RequestMapping("/broadcast")

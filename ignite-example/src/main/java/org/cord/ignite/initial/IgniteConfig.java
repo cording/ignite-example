@@ -1,8 +1,9 @@
 package org.cord.ignite.initial;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.Ignition;
-import org.apache.ignite.configuration.DataStorageConfiguration;
 import org.apache.ignite.configuration.IgniteConfiguration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,7 +12,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.jdbc.datasource.init.DatabasePopulator;
+import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
+import java.io.IOException;
 
 
 /**
@@ -56,5 +65,27 @@ public class IgniteConfig {
         log.info("-----------ignite service is started.----------");
 
         return ignite;
+    }
+
+    /**通过代码初始化datasource*/
+//    @Bean(name = "igniteDS")
+    public DriverManagerDataSource dataSource() throws IOException {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName("org.apache.ignite.IgniteJdbcThinDriver");
+        dataSource.setUrl("jdbc:ignite:thin://127.0.0.1");
+//        dataSource.setUsername("");
+//        dataSource.setPassword("");
+
+        // schema init
+        Resource[] initSchema = new PathMatchingResourcePatternResolver().getResources("classpath:db/schema.sql");
+//        Resource initData = new ClassPathResource("db/data.sql");
+        DatabasePopulator databasePopulator = new ResourceDatabasePopulator(initSchema);
+        DatabasePopulatorUtils.execute(databasePopulator, dataSource);
+        return dataSource;
+    }
+
+    @Bean
+    public Gson gson() {
+        return new GsonBuilder().serializeNulls().create();
     }
 }
