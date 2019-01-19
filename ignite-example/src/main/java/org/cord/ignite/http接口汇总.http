@@ -37,6 +37,15 @@ GET http://localhost:8080/taskSplit
 
 
 ###mybatis ignite
-GET http://localhost:8080/mybatis/findStudentsById?studentId=student_6
+###单表查询
+GET http://localhost:8080/mybatis/findStudentsById?studentId=6
 
 ###
+###多表联查
+GET http://localhost:8080/mybatis/findGradeByName?name=student_6
+
+###
+GET http://localhost:8080/mybatis/cpFindStudentsById?studentId=6
+
+###
+

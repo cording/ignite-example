@@ -15,4 +15,10 @@ public interface IgniteMapper {
      */
     Student findStudentsById(String studentId);
 
+    /**
+     * 根据学生姓名查询学生分数
+     * @param name
+     * @return 学生分数
+     */
+    Double findGradeByName(String name);
 }

@@ -13,7 +13,11 @@
     </resultMap>
 
     <select id="findStudentsById" parameterType="java.lang.String" resultMap="StudentResult">
-        SELECT * FROM student WHERE name= #{studentId}
+        SELECT * FROM student WHERE studid = #{studentId}
+    </select>
+
+    <select id="findGradeByName" parameterType="java.lang.String" resultType="java.lang.Double">
+        SELECT g.grade FROM student s,grade g WHERE s.STUDID=g.STUDID and s.name= #{name}
     </select>
 
 </mapper>
