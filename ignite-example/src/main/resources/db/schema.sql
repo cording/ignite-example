@@ -4,8 +4,8 @@ CREATE TABLE IF NOT EXISTS PUBLIC.STUDENT (
 	NAME VARCHAR,
 	EMAIL VARCHAR,
 	dob Date,
-	PRIMARY KEY (STUDID))
-WITH "template=replicated,atomicity=ATOMIC,cache_name=student,key_type=java.lang.Long";
+	PRIMARY KEY (STUDID, NAME))
+WITH "template=replicated,atomicity=ATOMIC,cache_name=student";
 
 CREATE INDEX IF NOT EXISTS STUDENT_NE_INDEX ON PUBLIC.STUDENT (NAME, EMAIL);
 
@@ -14,4 +14,4 @@ CREATE TABLE IF NOT EXISTS PUBLIC.GRADE (
 	STUDID INTEGER,
 	grade DOUBLE,
 	PRIMARY KEY (STUDID))
-WITH "template=replicated,atomicity=ATOMIC,cache_name=grade,key_type=java.lang.Long";
+WITH "template=replicated,atomicity=ATOMIC,cache_name=grade";
