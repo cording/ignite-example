@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import java.util.Date;
 
 /**
+ * goldengatemsg消息体
  * @author: cord
  * @date: 2019/1/19 0:08
  */

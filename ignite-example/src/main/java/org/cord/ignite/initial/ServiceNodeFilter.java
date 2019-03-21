@@ -11,6 +11,7 @@ public class ServiceNodeFilter implements IgnitePredicate<ClusterNode>{
      *
      * @return {@code true} if the node has to be considered as Data Node, {@code false} otherwise.
      */
+    @Override
     public boolean apply(ClusterNode node) {
         Boolean dataNode = node.attribute("service.node");
         return dataNode != null && dataNode;
