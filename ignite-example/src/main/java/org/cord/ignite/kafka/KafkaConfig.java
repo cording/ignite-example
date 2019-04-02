@@ -42,6 +42,9 @@ public class KafkaConfig {
     @Value("${kafka.consumer.max-poll-records}")
     private int maxPollRecords;
 
+    @Value("${kafka.partition.assignment.strategy}")
+    private int partitionAssignmentStrategy;
+
     @Bean
     public ConsumerFactory<String, String> consumerFactory() {
         Map<String, Object> props = new HashMap<>();
@@ -50,6 +53,7 @@ public class KafkaConfig {
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, autoOffsetReset);
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, enableAutoCommit);
         props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, maxPollRecords);
+        props.put(ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG, partitionAssignmentStrategy);
         return new DefaultKafkaConsumerFactory<>(props);
     }
 

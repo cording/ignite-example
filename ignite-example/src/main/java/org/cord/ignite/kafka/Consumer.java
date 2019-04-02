@@ -31,7 +31,7 @@ public class Consumer {
     @Autowired
     private Ignite ignite;
 
-    @KafkaListener(topics = {"test"}, containerFactory = "kafkaListenerContainerFactory")
+    @KafkaListener(topics = "#{'${kafka.topics}'.split(',')}", containerFactory = "kafkaListenerContainerFactory")
     public void receive(ConsumerRecord<?, ?> consumer, Acknowledgment ack) throws SQLException {
         GoldenGateMsg ggm = gson.fromJson(consumer.value().toString(), GoldenGateMsg.class);
         //提取变化前的数据
