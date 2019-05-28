@@ -40,11 +40,19 @@
 
         <!-- config client mode -->
         <property name="clientMode" value="false"/>
-		
-		<!--
-            Exclude force peer class loading of a class,
-            even if exists locally.
-        -->
+
+        <!-- Sets flag indicating whether the user authentication is enabled for cluster.-->
+        <!--<property name="authenticationEnabled" value="true"/>-->
+
+        <!-- Sets SQL schemas to be created on node startup. Schemas are created on local node only and are not propagated
+         to other cluster nodes. Created schemas cannot be dropped -->
+        <!--<property name="sqlSchemas">-->
+            <!--<list>-->
+                <!--<value>MY_SCHEMA</value>-->
+            <!--</list>-->
+        <!--</property>-->
+
+		<!--Exclude force peer class loading of a class, even if exists locally.-->
         <property name="peerClassLoadingLocalClassPathExclude">
             <list>
                <value>org.cord.ignite.*</value>

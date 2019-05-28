@@ -1,6 +1,5 @@
 package org.cord.ignite.initial;
 
-import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.ignite.Ignite;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -37,8 +35,8 @@ public class IgniteConfig {
     @Autowired
     private IgniteConfiguration igniteCfg;
 
-    @Value("ignite.isDebug")
-    private String isDebug;
+    @Value("${ignite.isDebug:#{false}}")
+    private Boolean isDebug;
 
     @Bean
     @ConditionalOnMissingBean
@@ -58,7 +56,7 @@ public class IgniteConfig {
 //        dcfg.setWalArchivePath();
 
         /**是否开启debug模式*/
-        if(Boolean.valueOf(isDebug)){
+        if(Boolean.TRUE.equals(isDebug)){
             igniteCfg.setFailureDetectionTimeout(Integer.MAX_VALUE);
             igniteCfg.setNetworkTimeout(Long.MAX_VALUE);
         }
