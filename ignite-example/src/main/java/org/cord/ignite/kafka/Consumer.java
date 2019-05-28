@@ -20,7 +20,7 @@ import java.util.Map;
  * @author: cord
  * @date: 2019/3/22 19:05
  */
-@Component
+//@Component
 public class Consumer {
 
     private static final Logger log = LogManager.getLogger(Consumer.class);

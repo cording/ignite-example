@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS PUBLIC.STUDENT (
 	dob Date,
 	PRIMARY KEY (STUDID, NAME))
 WITH "template=replicated,atomicity=ATOMIC,cache_name=student";
+-- WITH "template=student,atomicity=ATOMIC,cache_name=student";
 
 CREATE INDEX IF NOT EXISTS STUDENT_NE_INDEX ON PUBLIC.STUDENT (NAME, EMAIL);
 

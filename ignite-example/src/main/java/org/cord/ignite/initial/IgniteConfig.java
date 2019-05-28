@@ -55,12 +55,6 @@ public class IgniteConfig {
 //        dcfg.setWalPath();
 //        dcfg.setWalArchivePath();
 
-        /**是否开启debug模式*/
-        if(Boolean.TRUE.equals(isDebug)){
-            igniteCfg.setFailureDetectionTimeout(Integer.MAX_VALUE);
-            igniteCfg.setNetworkTimeout(Long.MAX_VALUE);
-        }
-
         Ignite ignite = Ignition.start(igniteCfg);
         log.info("-----------ignite service is started.----------");
 

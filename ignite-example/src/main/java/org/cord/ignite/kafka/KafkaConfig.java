@@ -20,8 +20,8 @@ import static org.springframework.kafka.listener.AbstractMessageListenerContaine
  * @date: 2019/3/21 20:26
  * kafka配置
  */
-@Configuration
-@EnableKafka
+//@Configuration
+//@EnableKafka
 public class KafkaConfig {
 
     @Value("${kafka.bootstrap-servers}")

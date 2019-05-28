@@ -22,7 +22,7 @@ import java.util.List;
  * @date: 2019/3/21 21:08
  * 主键字段缓存初始化
  */
-@Component
+//@Component
 public class CacheInit implements CommandLineRunner {
 
     @Autowired
