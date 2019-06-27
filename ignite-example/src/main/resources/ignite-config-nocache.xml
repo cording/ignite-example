@@ -40,7 +40,8 @@
 
         <!-- config client mode -->
         <property name="clientMode" value="false"/>
-		
+        <!--<property name="clientMode" value="true"/>-->
+
 		<!--
             Exclude force peer class loading of a class,
             even if exists locally.
@@ -68,6 +69,16 @@
                 <entry key="data.node" value="true"/>  <!--数据节点属性-->
                 <entry key="service.node" value="true"/>  <!--服务节点属性-->
             </map>
+        </property>
+
+        <property name="gridLogger" >
+            <bean class="org.apache.ignite.logger.log4j2.Log4J2Logger">
+                <constructor-arg type="java.net.URL">
+                    <bean class="java.net.URL">
+                        <constructor-arg type="java.lang.String" value="classpath:log4j2.xml"/>
+                    </bean>
+                </constructor-arg>
+            </bean>
         </property>
 
         <!-- Redefining maximum memory size for the cluster node usage. -->
@@ -103,9 +114,7 @@
                 </property>
 
                 <!-- Sets property that defines behavior of wal fsync. -->
-                <property name="walMode">
-                    <util:constant static-field="org.apache.ignite.configuration.WALMode.DEFAULT"/>
-                </property>
+                <property name="walMode" value="FSYNC"/>
 
                 <!-- Path where data and indexes will be persisted. -->
                 <!--<property name="storagePath" value="D:\\Test\\db" />-->

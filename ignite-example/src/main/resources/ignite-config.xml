@@ -78,6 +78,16 @@
             </map>
         </property>
 
+        <property name="gridLogger" >
+            <bean class="org.apache.ignite.logger.log4j2.Log4J2Logger">
+                <constructor-arg type="java.net.URL">
+                    <bean class="java.net.URL">
+                        <constructor-arg type="java.lang.String" value="classpath:log4j2.xml"/>
+                    </bean>
+                </constructor-arg>
+            </bean>
+        </property>
+
         <!-- Redefining maximum memory size for the cluster node usage. -->
         <property name="dataStorageConfiguration">
             <bean class="org.apache.ignite.configuration.DataStorageConfiguration">
@@ -111,9 +121,7 @@
                 </property>
 
                 <!-- Sets property that defines behavior of wal fsync. -->
-                <property name="walMode">
-                    <util:constant static-field="org.apache.ignite.configuration.WALMode.DEFAULT"/>
-                </property>
+                <property name="walMode" value="FSYNC"/>
 
                 <!-- Path where data and indexes will be persisted. -->
                 <!--<property name="storagePath" value="D:\\Test\\db" />-->

@@ -2,13 +2,17 @@ package org.cord.ignite.controller;
 
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
+import org.apache.ignite.IgniteDataStreamer;
 import org.apache.ignite.IgniteJdbcDriver;
-import org.apache.ignite.cache.query.FieldsQueryCursor;
-import org.apache.ignite.cache.query.SqlFieldsQuery;
-import org.apache.ignite.cache.query.SqlQuery;
+import org.apache.ignite.binary.BinaryObject;
+import org.apache.ignite.binary.BinaryObjectBuilder;
+import org.apache.ignite.cache.QueryEntity;
+import org.apache.ignite.cache.query.*;
 import org.apache.ignite.cluster.ClusterNode;
+import org.apache.ignite.configuration.CacheConfiguration;
 import org.apache.ignite.configuration.IgniteConfiguration;
 import org.apache.ignite.internal.IgniteKernal;
+import org.apache.ignite.internal.binary.builder.BinaryPlainBinaryObject;
 import org.apache.ignite.internal.processors.affinity.AffinityTopologyVersion;
 import org.apache.ignite.internal.processors.cache.GridCacheUtils;
 import org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi;
@@ -29,10 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -41,6 +42,7 @@ import java.util.stream.IntStream;
  * http://localhost:8080/sqlFieldsQuery
  * http://localhost:8080/sqlQuery
  * http://localhost:8080/getByKey
+ * http://localhost:8080/ddlstream
  */
 @RestController
 public class NormalController {
@@ -50,6 +52,7 @@ public class NormalController {
 
     @Autowired
     private IgniteConfiguration igniteCfg;
+    private Student student;
 
     @RequestMapping("/getByKey")
     public @ResponseBody
@@ -61,6 +64,32 @@ public class NormalController {
         return "all executed!";
     }
 
+    /**
+     * BinaryObject 流导数
+     * CREATE TABLE IF NOT EXISTS PUBLIC.TEST (
+     * 	STUDID INTEGER,
+     * 	grade DOUBLE,
+     * 	info varchar,
+     * 	PRIMARY KEY (STUDID, grade))
+     * WITH "template=replicated,atomicity=ATOMIC,cache_name=test,key_type=java.lang.String";
+     */
+    @RequestMapping("/ddlstream")
+    public @ResponseBody
+    String ddlByStream(HttpServletRequest request, HttpServletResponse response) {
+        IgniteCache<Object, BinaryObject> cache = ignite.cache("test").withKeepBinary();
+        BinaryObject student = cache.get("1");
+        IgniteDataStreamer<Object, BinaryObject> dataLdr = ignite.dataStreamer("test");
+        List<QueryEntity> list = (ArrayList)cache.getConfiguration(CacheConfiguration.class).getQueryEntities();
+        String valueType = list.get(0).findValueType();
+        BinaryObjectBuilder obj = ignite.binary().builder(valueType);
+        obj.setField("studid", 22);
+        obj.setField("grade", 22);
+        obj.setField("info", "ss");
+        dataLdr.addData("351", obj.build());
+        dataLdr.close(false);
+        return "all executed!";
+    }
+    
     @RequestMapping("/sqlFieldsQuery")
     public @ResponseBody
     String sqlFieldsQuery(HttpServletRequest request, HttpServletResponse response) {
