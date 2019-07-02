@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT" ignoreExceptions="false">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
+            <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+        </Console>
+        <RollingFile name="rollingFile" fileName="logs/app_info.log" filePattern="logs/app_info.%d{yyyy-MM-dd}_%i.log"
+                     append="true" immediateFlush="true">
+            <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <OnStartupTriggeringPolicy/>
+            </Policies>
+        </RollingFile>
+        <RollingFile name="errorRollingFile" fileName="logs/app_error.log"
+                     filePattern="logs/app_error.%d{yyyy-MM-dd}_%i.log" append="true" immediateFlush="true">
+            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <OnStartupTriggeringPolicy/>
+            </Policies>             <!--<Filters>-->             <!--</Filters>-->
+        </RollingFile>
+    </Appenders>
+    <Loggers>         <!-- 异步日志-->
+        <AsyncRoot level="trace" additivity="false" includeLocation="true">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="rollingFile"/>
+            <appender-ref ref="errorRollingFile"/>
+        </AsyncRoot>
+    </Loggers>
+</Configuration>
