@@ -24,6 +24,8 @@
     <!--
         Alter configuration below as needed.
     -->
+
+    <import resource="classpath:service-config.xml"/>
 	
 	<bean id="igniteCfg" class="org.apache.ignite.configuration.IgniteConfiguration">
         <!-- Consistent globally unique node identifier which survives node restarts.-->
@@ -176,39 +178,39 @@
             </list>
         </property>
 
-        <property name="serviceConfiguration">
+        <property name="serviceConfiguration" ref="serviceList" />
+<!--        <property name="serviceConfiguration">
             <list>
-                <!--
+                &lt;!&ndash;
                   Setting up MaintenanceService. The service will be deployed automatically according to the configuration
                   below.
-                  -->
+                  &ndash;&gt;
                 <bean class="org.apache.ignite.services.ServiceConfiguration">
-                    <!-- Unique service name -->
+                    &lt;!&ndash; Unique service name &ndash;&gt;
                     <property name="name" value="myCounterService"/>
 
-                    <!-- Service implementation's class -->
+                    &lt;!&ndash; Service implementation's class &ndash;&gt;
                     <property name="service">
-                        <!--<bean class="org.cord.ignite.servicegrid.MyCounterServiceImpl"/>-->
-                        <ref bean="myCounterServiceImpl" />
+                        <bean class="org.cord.ignite.servicegrid.MyCounterServiceImpl"/>
                     </property>
 
-                    <!-- Only one instance of the service will be deployed cluster wide. -->
+                    &lt;!&ndash; Only one instance of the service will be deployed cluster wide. &ndash;&gt;
                     <property name="totalCount" value="1"/>
 
-                    <!-- Only one instance of the service can be deployed on a single node. -->
+                    &lt;!&ndash; Only one instance of the service can be deployed on a single node. &ndash;&gt;
                     <property name="maxPerNodeCount" value="1"/>
 
-                    <!--
+                    &lt;!&ndash;
                       Enabling a special nodes filter for this service. The filter will make sure that the service
                       will be deployed only on the nodes that have 'maintenance.service.node' attribute in the local
                       node map.
-                    -->
+                    &ndash;&gt;
                     <property name="nodeFilter">
                         <bean class="org.cord.ignite.initial.ServiceNodeFilter"/>
                     </property>
                 </bean>
             </list>
-        </property>
+        </property>-->
 
         <property name="clientConnectorConfiguration">
             <!-- Client connector configuration (JDBC, ODBC, thin clients) -->

@@ -127,6 +127,7 @@ public class NormalController {
         sfq.setReplicatedOnly(true);
         FieldsQueryCursor<List<?>> qc = tempCache.query(sfq);
         List<List<?>> result = qc.getAll();
+        qc.close(); //关闭资源防止内存泄漏
         //将每一行的记录转换为map对象, key为对应的列名，value为对应的值
         List<Map<?, ?>> maps = result.stream().map(x -> IntStream.range(0, x.size()).boxed().collect(Collectors.toMap(i -> qc.getFieldName(i), i -> x.get(i)))).collect(Collectors.toList());
 
