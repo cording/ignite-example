@@ -20,7 +20,8 @@ public class MapDeserializer implements JsonDeserializer<Map<String, String>> {
         final JsonObject jsonObject = json.getAsJsonObject();
         Map<String, String> map = new HashMap<>();
         jsonObject.entrySet().forEach(e -> {
-            map.put(LOWER_UNDERSCORE.to(LOWER_CAMEL, e.getKey()), e.getValue().isJsonNull() ? null : e.getValue().toString());
+            //字段首尾双引号替换为单引号
+            map.put(LOWER_UNDERSCORE.to(LOWER_CAMEL, e.getKey()), e.getValue().isJsonNull() ? null : e.getValue().toString().replaceFirst("^\"", "'").replaceFirst("\"$", "'"));
         });
         return map;
     }

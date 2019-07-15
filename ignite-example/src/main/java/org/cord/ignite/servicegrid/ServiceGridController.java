@@ -4,7 +4,9 @@ import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCompute;
 import org.apache.ignite.IgniteServices;
 import org.apache.ignite.cluster.ClusterGroup;
+import org.apache.ignite.lang.IgniteCallable;
 import org.apache.ignite.lang.IgniteRunnable;
+import org.apache.ignite.resources.IgniteInstanceResource;
 import org.apache.ignite.resources.ServiceResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +29,28 @@ public class ServiceGridController {
     private Ignite ignite;
 
     private AtomicBoolean flag = new AtomicBoolean(false);
+
+
+    /**
+     * 根据服务名调用服务
+     * @param svcsName
+     * @return
+     */
+    @GetMapping("/invokeSvcs")
+    public String invoSvcs(String svcsName)  {
+        IgniteCompute compute = ignite.compute(ignite.cluster().forServers());
+        return compute.call(new IgniteCallable<String>() {
+            @IgniteInstanceResource
+            private Ignite ignite;
+
+            @Override
+            public String call() throws Exception {
+                IgniteServices svcs = ignite.services(ignite.cluster().forRemotes());
+                CommonService commSvcs = svcs.serviceProxy(svcsName, CommonService.class, false);
+                return commSvcs.execute();
+            }
+        });
+    }
 
     @GetMapping("/test1")
     public String test1() {
