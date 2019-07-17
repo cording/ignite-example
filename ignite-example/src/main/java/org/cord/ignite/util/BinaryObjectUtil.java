@@ -147,6 +147,7 @@ public class BinaryObjectUtil {
                         param.putAll(params);
                         param.put("pageCount", totalPage);
                         param.put("currentPage", j);
+                        param.put("condition", QUERY_CONDITION.get(tableName));
 //                        DynamicDataSourceContextHolder.setDateSoureType(d);
                         List<Map<String, Object>> list = /**dao.queryTable(param);*/ new ArrayList<>();
                         streamingBinaryObject(keyType, valueType, list, ids, pkFileds);
@@ -170,6 +171,60 @@ public class BinaryObjectUtil {
             log.error(e.getMessage(), e);
         }
     }
+
+
+    /**
+     * 以年为单位分时间段导数
+     * 传入年范围然后用时间字段分区按月导数
+     * @param table 表名
+     * @param field 分区字段
+     */
+    public static final String time_region_fmt = "%s >= date'%s-%s-01' and %s < date'%s-%s-01'";
+    public void loadByTimeSlice(String table, String field, int startYear, int endYear) {
+        for (int i = startYear; i <= endYear; i++) {
+            for (int j = 1; j <= 12; j++) {
+                if (j < 12) {
+                    QUERY_CONDITION.put(table.toUpperCase(), String.format(time_region_fmt, field, i, j, field, i, j+1));
+                } else {
+                    //如果是12月,则边界上限是下一年的一月
+                    QUERY_CONDITION.put(table.toUpperCase(), String.format(time_region_fmt, field, i, j, field, i+1, 1));
+                }
+                loadTable(table);
+            }
+        }
+    }
+
+    /**
+     * 以月为单位分时间段导数
+     * 传入年月范围然后用时间字段分区按月导数
+     * @param table 表名
+     * @param field 分区字段
+     */
+    public void loadByTimeSlice(String table, String field, int startYear, int startMonth, int endYear, int endMonth) {
+        int totalMonth = (endYear - startYear)*12 + (endMonth - startMonth);
+        if (totalMonth <= 0) {
+            throw new RuntimeException("the end time should be bigger than the start time");
+        }
+        int month, counter=0;
+        for (int i = 0; i < totalMonth; i++) {
+            month = startMonth + i;
+            //如果到年底
+            if (month % 12 == 0) {
+                counter+=1; //年计数器
+                QUERY_CONDITION.put(table.toUpperCase(), String.format(time_region_fmt, field, startYear+counter-1, 12, field, startYear+counter, 1));
+            } else {
+                QUERY_CONDITION.put(table.toUpperCase(), String.format(time_region_fmt, field, startYear+counter, month-12*counter, field, startYear+counter, month-12*counter+1));
+            }
+            loadTable(table);
+        }
+    }
+
+    /**
+     * 导数范围限制条件
+     */
+    public static Map<String, String> QUERY_CONDITION = new HashMap<String, String>() {{
+//        put("STUDENT", "date>'2018-10-01' and date<'2018-11-01'");
+    }};
 
     /**
      * 导数线程池
