@@ -27,6 +27,10 @@ import java.util.concurrent.*;
  * @author: cord
  * @date: 2019/7/2 22:19
  * BinaryObject相关操作
+ * 在ignite中底层数据结构为BinaryObject，使用BinaryObject操作集群可以剥离缓存对value type class的依赖，
+ * 比如在分布式计算中，通过使用通用数据结构，可以避免在急群中每个节点部署value class。
+ * 如果用ddl定义table，一样可以用BinaryObject操作cache，这样可以使用kv模式操作表，
+ * 比如使用api流给table导数据，当然也可以使用sql 流。
  */
 @Component
 public class BinaryObjectUtil {

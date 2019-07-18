@@ -43,8 +43,7 @@
         <!--<property name="clientMode" value="true"/>-->
 
 		<!--
-            Exclude force peer class loading of a class,
-            even if exists locally.
+            Exclude force peer class loading of a class, even if exists locally.
         -->
         <property name="peerClassLoadingLocalClassPathExclude">
             <list>
@@ -92,8 +91,13 @@
                         <property name="maxSize" value="#{1L * 1024 * 1024 * 1024}"/>
                         <!-- Enabling Apache Ignite Persistent Store. -->
                         <!--<property name="persistenceEnabled" value="true"/>-->
+                        <!-- Increasing the buffer size to 8 GB. -->
+                        <!--<property name="checkpointPageBufferSize" value="#{8 * 1024L * 1024 * 1024}"/>-->
                     </bean>
                 </property>
+                <property name="pageSize" value="#{4 * 1024}"/>
+                <!-- Size of the WAL (Write Ahead Log) segment -->
+                <property name="walSegmentSize" value="#{1024 * 1024 * 1024}"/>
                 <property name="dataRegionConfigurations">
                     <list>
                         <!--
@@ -114,7 +118,7 @@
                 </property>
 
                 <!-- Sets property that defines behavior of wal fsync. -->
-                <property name="walMode" value="FSYNC"/>
+                <property name="walMode" value="LOG_ONLY"/>
 
                 <!-- Path where data and indexes will be persisted. -->
                 <!--<property name="storagePath" value="D:\\Test\\db" />-->
