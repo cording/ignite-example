@@ -146,6 +146,8 @@
                     <property name="cacheMode" value="REPLICATED"/>
                     <property name="backups" value="1"/>
 					<property name="atomicityMode" value="ATOMIC"/>
+                    <!-- This mode controls whether the main caller should wait for update on other nodes to complete or not.-->
+                    <property name="writeSynchronizationMode" value="PRIMARY_SYNC"/>
                     <!-- Force cache to return the instance that is stored in cache instead of creating a copy. -->
                     <property name="copyOnRead" value="false"/>
                     <property name="dataRegionName" value="Default_Region"/>
@@ -232,6 +234,7 @@
 						</property>
 					</bean>
 				</property>
+                <property name="networkTimeout" value="10000"/>
 			</bean>
 		</property>
 		<property name="communicationSpi">

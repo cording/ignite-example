@@ -7,6 +7,9 @@ import org.apache.ignite.Ignition;
 import org.apache.ignite.configuration.IgniteConfiguration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.tomcat.jdbc.pool.DataSource;
+import org.apache.tomcat.jdbc.pool.PoolConfiguration;
+import org.apache.tomcat.jdbc.pool.PoolProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -14,7 +17,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
@@ -61,14 +63,28 @@ public class IgniteConfig {
         return ignite;
     }
 
-    /**通过代码初始化datasource*/
+    /**
+     * 通过代码初始化datasource
+     */
 //    @Bean(name = "igniteDS")
-    public DriverManagerDataSource dataSource() throws IOException {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("org.apache.ignite.IgniteJdbcThinDriver");
-        dataSource.setUrl("jdbc:ignite:thin://127.0.0.1");
-//        dataSource.setUsername("");
-//        dataSource.setPassword("");
+    public DataSource dataSource() throws IOException {
+        PoolConfiguration pc = new PoolProperties();
+        pc.setDriverClassName("org.apache.ignite.IgniteJdbcThinDriver");
+        pc.setUrl("jdbc:ignite:thin://127.0.0.1");
+        pc.setInitialSize(10);
+        pc.setMinIdle(10);
+        pc.setMaxActive(100);
+        pc.setMaxIdle(20);
+        pc.setRemoveAbandonedTimeout(60);
+        pc.setRemoveAbandoned(true);
+        //检测链接可用性，防止节点重启的情况
+        pc.setValidationQuery("SELECT 1 FROM dual");
+        pc.setValidationInterval(3000);
+        pc.setTestOnBorrow(true); //获取链接的时候检测链接可用性,并不是每次都检验，取决于validationInterval
+        pc.setTestOnConnect(true); //建立链接的时候检测链接可用性
+        DataSource dataSource = new DataSource(pc);
+        dataSource.setUsername("ignite");
+        dataSource.setPassword("ignite");
 
         // schema init
         Resource[] initSchema = new PathMatchingResourcePatternResolver().getResources("classpath:db/schema.sql");
