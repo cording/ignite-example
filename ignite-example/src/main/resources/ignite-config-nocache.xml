@@ -149,8 +149,9 @@
 				    <bean class="org.apache.ignite.spi.discovery.tcp.ipfinder.vm.TcpDiscoveryVmIpFinder">
 					    <property name="addresses">
 						    <list>
-							    <value>127.0.0.1:48500..48520</value>
-							</list>
+<!--							    <value>127.0.0.1:48500..48520</value>-->
+                                <value>127.0.0.1:48500</value>
+                            </list>
 						</property>
 					</bean>
 				</property>
