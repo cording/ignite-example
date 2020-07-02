@@ -132,6 +132,11 @@ public class MybatisInterceptor implements Interceptor {
         return sql;
     }
 
+    /**
+     * 参数类型转换
+     * @param obj
+     * @return
+     */
     private String getParameterValue(Object obj) {
         String value = null;
         if (obj instanceof String) {
