@@ -61,6 +61,9 @@
             </list>
         </property>
 
+        <!-- 默认所有sql超时，会后台打印explain执行计划，但是同时explain命令无法使用了 -->
+<!--        <property name="longQueryWarningTimeout" value="-1" />-->
+
         <property name="includeEventTypes">
             <list>
                 <util:constant static-field="org.apache.ignite.events.EventType.EVT_TASK_STARTED"/>
