@@ -43,6 +43,9 @@
         <!-- config client mode -->
         <property name="clientMode" value="false"/>
 
+        <!-- Failure detection timeout used by discovery and communication subsystems -->
+        <!-- <property name="failureDetectionTimeout" value="300000"/> -->
+
         <!-- Sets flag indicating whether the user authentication is enabled for cluster.-->
         <!--<property name="authenticationEnabled" value="true"/>-->
 

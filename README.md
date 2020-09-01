@@ -1,7 +1,6 @@
 # ignite-example
 
 本示例主要是针对ignite的常见功能的使用的一个demo，相关内容讲解请参阅博客[https://www.cnblogs.com/cord/category/1241938.html](https://www.cnblogs.com/cord/category/1241938.html)
-
 其主要目录结构如下:
 
 数据库初始化文件:
@@ -36,3 +35,8 @@ rest接口示例:
 服务网格:
 
 `ignite-example/ignite-example/src/main/java/org/cord/ignite/servicegrid`
+
+
+BinaryObject封装方法：
+`ignite-example/src/main/java/org/cord/ignite/util/BinaryObjectUtil.java`
+
