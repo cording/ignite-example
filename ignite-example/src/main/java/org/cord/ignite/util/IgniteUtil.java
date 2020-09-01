@@ -55,6 +55,20 @@ public class IgniteUtil {
 
     /**
      * 将ignite的数据迭代写进关系型数据库
+     * 相关mapper如下
+     *
+     * <insert id="batchInsert" parameterType="java.util.Map">
+     *         insert into ${tableName}
+     *         <foreach collection="fields" item="field" open="(" close=")" separator=",">
+     *             ${field}
+     *         </foreach>
+     *         values
+     *         <foreach collection="nestList" item="item1" separator=",">
+     *             <foreach collection="item1" item="item2" open="(" close=")" separator=",">
+     *                 #{item2}
+     *             </foreach>
+     *         </foreach>
+     *     </insert>
      * @param tableName
      */
     public void loadFromIgniteToDb(String tableName) {
