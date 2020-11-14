@@ -10,10 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,7 +64,8 @@ public class CacheInit implements CommandLineRunner {
      * @throws SQLException
      */
     public List<String> queryPkFields(String cacheName) throws SQLException {
-        try (Connection connection = jdbcTemplate.getDataSource().getConnection()) {
+//        try (Connection connection = jdbcTemplate.getDataSource().getConnection()) {
+        try (Connection connection = DriverManager.getConnection("jdbc:ignite:thin://127.0.0.1:10800,127.0.0.1:10801")) {
             DatabaseMetaData meta = connection.getMetaData();
             ResultSet rs = meta.getPrimaryKeys(null, null, cacheName);
             List<String> list = new ArrayList<>();

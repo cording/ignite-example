@@ -231,6 +231,7 @@
 		    <bean class="org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi">
 			    <property name="localPort" value="48500"/>
 				<property name="localPortRange" value="20"/>
+                <property name="localAddress" value="0.0.0.0" /><!-- 限制绑定的ip，防止多网卡机器-->
 				<property name="ipFinder">
 				    <bean class="org.apache.ignite.spi.discovery.tcp.ipfinder.vm.TcpDiscoveryVmIpFinder">
 					    <property name="addresses">
