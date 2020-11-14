@@ -65,7 +65,7 @@ public class CacheInit implements CommandLineRunner {
      */
     public List<String> queryPkFields(String cacheName) throws SQLException {
 //        try (Connection connection = jdbcTemplate.getDataSource().getConnection()) {
-        try (Connection connection = DriverManager.getConnection("jdbc:ignite:thin://127.0.0.1:10800,127.0.0.1:10801")) {
+        try (Connection connection = DriverManager.getConnection("jdbc:ignite:thin://127.0.0.1:10800,127.0.0.1:10801/")) {
             DatabaseMetaData meta = connection.getMetaData();
             ResultSet rs = meta.getPrimaryKeys(null, null, cacheName);
             List<String> list = new ArrayList<>();
