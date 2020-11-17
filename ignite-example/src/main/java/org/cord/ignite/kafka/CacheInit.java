@@ -10,9 +10,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import javax.cache.expiry.CreatedExpiryPolicy;
+import javax.cache.expiry.Duration;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author: cord
@@ -37,7 +40,8 @@ public class CacheInit implements CommandLineRunner {
      */
     @Override
     public void run(String... strings) {
-        pkFields = ignite.getOrCreateCache(new CacheConfiguration<String, List<String>>().setName(TABLE_PK_FIELD).setCacheMode(CacheMode.REPLICATED));
+        pkFields = ignite.getOrCreateCache(new CacheConfiguration<String, List<String>>().setName(TABLE_PK_FIELD).setCacheMode(CacheMode.REPLICATED)
+                .setExpiryPolicyFactory(CreatedExpiryPolicy.factoryOf(new Duration(TimeUnit.HOURS, 3L))));
     }
 
     /**
@@ -67,7 +71,7 @@ public class CacheInit implements CommandLineRunner {
 //        try (Connection connection = jdbcTemplate.getDataSource().getConnection()) {
         try (Connection connection = DriverManager.getConnection("jdbc:ignite:thin://127.0.0.1:10800,127.0.0.1:10801/")) {
             DatabaseMetaData meta = connection.getMetaData();
-            ResultSet rs = meta.getPrimaryKeys(null, null, cacheName);
+            ResultSet rs = meta.getPrimaryKeys(null, null, cacheName.toUpperCase());
             List<String> list = new ArrayList<>();
             while (rs.next()) {
                 String columnName = rs.getString("COLUMN_NAME");
